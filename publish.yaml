@@ -1,6 +1,6 @@
 Type: Application
 Name: start-unzip-oss
-Version: 0.0.4
+Version: 0.0.5
 Provider:
   - 阿里云
 Description: 使用函数计算自动解压上传到OSS指定前缀目录的zip文件
@@ -24,10 +24,10 @@ Parameters:
     - serviceName
     - functionName
     - roleArn
-    - BucketName
-    - Prefix
-    - ProcessedDir
-    - RetainFileName
+    - bucketName
+    - prefix
+    - processedDir
+    - retainFileName
   properties:
     region:
       title: 地域
@@ -109,6 +109,6 @@ Parameters:
       required: true
       x-role:
         name: aliyunosseventnotificationrole
-        service: oss
+        service: OSS
         authorities:
           - AliyunFCInvocationAccess
