@@ -42,11 +42,12 @@ services:
         codeUri: ./code
         memorySize: 3072
         environmentVariables:
-          PROCESSED_DIR: "{{ ProcessedDir }}"
-          RETAIN_FILE_NAME: "{{ RetainFileName }}"
+          PROCESSED_DIR: "{{ processedDir }}"
+          RETAIN_FILE_NAME: "{{ retainFileName }}"
       triggers:
         - name: unzip-oss-trigger
           type: oss
+          role: "{{ triggerRoleArn }}"
           config:
             events:
               - oss:ObjectCreated:PutObject
@@ -55,6 +56,6 @@ services:
               - oss:ObjectCreated:PutSymlink
             filter:
               Key:
-                Prefix: "{{ Prefix }}"
+                Prefix: "{{ prefix }}"
                 Suffix: .zip
-            bucketName: "{{ BucketName }}"
+            bucketName: "{{ bucketName }}"

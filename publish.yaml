@@ -1,6 +1,6 @@
 Type: Application
 Name: start-unzip-oss
-Version: 0.0.3
+Version: 0.0.4
 Provider:
   - 阿里云
 Description: 使用函数计算自动解压上传到OSS指定前缀目录的zip文件
@@ -77,22 +77,22 @@ Parameters:
         authorities:
           - AliyunOSSFullAccess
           - AliyunFCDefaultRolePolicy
-    BucketName:
+    bucketName:
       title: OSS存储桶名
       type: string
       default: ""
       description: OSS存储桶名(注意和函数同地域)
-    Prefix:
+    prefix:
       title: 前缀
       type: string
       default: src
       description: 建议设置精准的前缀，同一个 Bucket 下的不同触发器条件不能重叠包含
-    ProcessedDir:
+    processedDir:
       title: 解压目标目录
       type: string
       default: dst
       description: 将匹配到的文件解压到此目标目录下。为防止循环触发产生不必要的费用，建议您设置不同于前缀的目标目录。
-    RetainFileName:
+    retainFileName:
       title: 是否保留压缩文件名为路径目录
       type: string
       default: false
@@ -100,3 +100,15 @@ Parameters:
       enum:
         - true
         - false
+    triggerRoleArn:
+      title: 触发器RAM角色ARN
+      type: string
+      default: ''
+      pattern: '^acs:ram::[0-9]*:role/.*$'
+      description: OSS使用此角色来发送事件通知来调用函数
+      required: true
+      x-role:
+        name: aliyunosseventnotificationrole
+        service: oss
+        authorities:
+          - AliyunFCInvocationAccess
