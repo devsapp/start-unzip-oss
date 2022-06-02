@@ -1,6 +1,6 @@
 Type: Application
 Name: start-unzip-oss
-Version: 0.0.5
+Version: 0.0.6
 Provider:
   - 阿里云
 Description: 使用函数计算自动解压上传到OSS指定前缀目录的zip文件
@@ -95,11 +95,11 @@ Parameters:
     retainFileName:
       title: 是否保留压缩文件名为路径目录
       type: string
-      default: false
+      default: "false"
       description: 是否保留压缩文件名为路径目录？ 若为 true, 您的目标目录为target, 压缩文件名为source.zip, 则解压后文件路径为target/source/..., 否则为 target/...。
       enum:
-        - true
-        - false
+        - "true"
+        - "false"
     triggerRoleArn:
       title: 触发器RAM角色ARN
       type: string
