@@ -1,6 +1,6 @@
 Type: Application
 Name: start-unzip-oss
-Version: 0.0.7
+Version: 0.0.8
 Provider:
   - 阿里云
 Description: 使用函数计算自动解压上传到OSS指定前缀目录的zip文件
@@ -81,7 +81,7 @@ Parameters:
       title: OSS存储桶名
       type: string
       default: ""
-      description: OSS存储桶名
+      description: OSS存储桶名(注意和函数同地域)
       x-bucket:
         dependency:
           - region
