@@ -8,8 +8,6 @@
 对于其他编码，我们这里尝试使用chardet这个库进行编码判断， 但是这个并不能保证100% 正确，
 建议用户先调试函数，如果有必要改写这个函数，并保证调试通过
 
-函数最新进展可以关注该blog: https://yq.aliyun.com/articles/680958
-
 Statement:
 This function names and encodes files and folders as follows:
 1. MAC/Linux system, default is utf-8
@@ -62,7 +60,7 @@ def get_zipfile_name(origin_name):  # 解决中文乱码问题
         name_bytes = origin_name.encode(encoding="utf-8")
 
     # the string to be detect is long enough, the detection result accuracy is higher
-    detect = chardet.detect((name_bytes*100)[0:100])
+    detect = chardet.detect(name_bytes)
     confidence = detect["confidence"]
     if confidence > 0.8:
         try:
