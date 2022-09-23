@@ -71,7 +71,10 @@ def get_zipfile_name(origin_name):  # 解决中文乱码问题
         except:
             name = name_bytes.decode(encoding="gb18030")
     else:
-        name = name_bytes.decode(encoding="gb18030")
+        try:
+            name = name_bytes.decode(encoding="gb18030")
+        except:
+            name = name_bytes.decode(encoding="utf-8")
     return name
 
 

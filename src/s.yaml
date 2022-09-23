@@ -15,7 +15,7 @@
 #   更多函数计算案例，可参考：https://github.com/devsapp/awesome/
 #   有问题快来钉钉群问一下吧：33947367
 edition: 1.0.0
-name:  UnZip OSS
+name: UnZip OSS
 # access 是当前应用所需要的密钥信息配置：
 # 密钥配置可以参考：https://www.serverless-devs.com/serverless-devs/command/config
 # 密钥使用顺序可以参考：https://www.serverless-devs.com/serverless-devs/tool#密钥使用顺序与规范
@@ -35,7 +35,7 @@ services:
         role: "{{ roleArn }}"
         internetAccess: true
       function:
-        name: "{{ functionName }}" 
+        name: "{{ functionName }}"
         handler: index.handler
         timeout: 7200
         runtime: python3
@@ -44,6 +44,14 @@ services:
         environmentVariables:
           PROCESSED_DIR: "{{ processedDir }}"
           RETAIN_FILE_NAME: "{{ retainFileName }}"
+        # 如果是很大的 ZIP 文件， 想使用异步调用，可以开启如下配置,  将每次函数调用看做一个任务执行
+        asyncConfiguration:
+          # destination:
+          #   onSuccess: acs:fc:::services/${vars.service.name}/functions/dest-succ
+          #   onFailure: acs:fc:::services/${vars.service.name}/functions/dest-fail
+          maxAsyncEventAgeInSeconds: 7200
+          maxAsyncRetryAttempts: 3
+          statefulInvocation: true
       triggers:
         - name: unzip-oss-trigger
           type: oss
