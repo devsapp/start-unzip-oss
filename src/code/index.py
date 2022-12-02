@@ -62,7 +62,7 @@ def get_zipfile_name(origin_name):  # 解决中文乱码问题
     # the string to be detect is long enough, the detection result accuracy is higher
     detect = chardet.detect(name_bytes)
     confidence = detect["confidence"]
-    if confidence > 0.8:
+    if confidence > 0.75:
         try:
             detect_encoding = detect["encoding"]
             if detect_encoding.lower() in ["gb2312", "gbk"]:
