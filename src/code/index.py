@@ -5,7 +5,7 @@
 1. mac/linux 系统， 默认是utf-8
 2. windows 系统， 默认是gb2312， 也可以是utf-8
 
-对于其他编码，我们这里尝试使用chardet这个库进行编码判断， 但是这个并不能保证100% 正确，
+对于其他编码，我们这里尝试使用chardet这个库进行编码判断，但是这个并不能保证100% 正确，
 建议用户先调试函数，如果有必要改写这个函数，并保证调试通过
 
 Statement:
@@ -30,8 +30,6 @@ import chardet
 When a source/ prefix object is placed in an OSS, it is hoped that the object will be decompressed and then stored in the OSS as processed/ prefixed.
 For example, source/a.zip will be processed as processed/a/... 
 "Source /", "processed/" can be changed according to the user's requirements.
-
-detail: https://yq.aliyun.com/articles/680958
 """
 # Close the info log printed by the oss SDK
 logging.getLogger("oss2.api").setLevel(logging.ERROR)
@@ -62,10 +60,10 @@ def get_zipfile_name(origin_name):  # 解决中文乱码问题
     # the string to be detect is long enough, the detection result accuracy is higher
     detect = chardet.detect(name_bytes)
     confidence = detect["confidence"]
-    if confidence > 0.75:
+    detect_encoding = detect["encoding"]
+    if confidence > 0.75 and (detect_encoding.lower() in ["gb2312", "gbk", "gb18030", "ascii", "utf-8"]):
         try:
-            detect_encoding = detect["encoding"]
-            if detect_encoding.lower() in ["gb2312", "gbk"]:
+            if detect_encoding.lower() in ["gb2312", "gbk", "gb18030"]:
                 detect_encoding = "gb18030"
             name = name_bytes.decode(detect_encoding)
         except:
