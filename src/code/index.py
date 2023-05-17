@@ -73,6 +73,8 @@ def get_zipfile_name(origin_name):  # 解决中文乱码问题
             name = name_bytes.decode(encoding="gb18030")
         except:
             name = name_bytes.decode(encoding="utf-8")
+    # fix windows \\ as dir segment
+    name = name.replace("\\", "/")
     return name
 
 
