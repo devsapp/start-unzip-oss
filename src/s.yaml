@@ -46,9 +46,9 @@ services:
           RETAIN_FILE_NAME: "{{ retainFileName }}"
         # 如果是很大的 ZIP 文件， 想使用异步调用，可以开启如下配置,  将每次函数调用看做一个任务执行
         asyncConfiguration:
-          # destination:
-          #   onSuccess: acs:fc:::services/${vars.service.name}/functions/dest-succ
-          #   onFailure: acs:fc:::services/${vars.service.name}/functions/dest-fail
+          destination:
+            #   onSuccess: acs:fc:::services/${vars.service.name}/functions/dest-succ
+            onFailure: acs:fc:::services/${vars.service.name}/functions/dest-fail
           maxAsyncEventAgeInSeconds: 7200
           maxAsyncRetryAttempts: 3
           statefulInvocation: true
@@ -67,3 +67,17 @@ services:
                 Prefix: "{{ prefix }}"
                 Suffix: .zip
             bucketName: "{{ bucketName }}"
+
+  dest-fail:
+    component: fc
+    props:
+      region: ${vars.region}
+      service: ${vars.service}
+      function:
+        name: dest-fail
+        description: "async task destination fail function by serverless devs"
+        runtime: python3
+        codeUri: ./fail
+        handler: index.handler
+        memorySize: 512
+        timeout: 60
