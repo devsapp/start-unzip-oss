@@ -23,17 +23,18 @@ access: "{{ access }}"
 
 vars:
   region: "{{ region }}" # 关于变量的使用方法，可以参考：https://www.serverless-devs.com/serverless-devs/yaml#变量赋值
+  service:
+    name: "{{ serviceName }}"
+    description: unzip oss sample
+    internetAccess: true
+    role: "{{ roleArn }}"
 
 services:
   fc-zip-oss-service:
     component: fc
     props:
       region: ${vars.region}
-      service:
-        name: "{{ serviceName }}"
-        description: unzip oss sample
-        role: "{{ roleArn }}"
-        internetAccess: true
+      service: ${vars.service}
       function:
         name: "{{ functionName }}"
         handler: index.handler
