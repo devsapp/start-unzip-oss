@@ -1,6 +1,6 @@
 Type: Application
 Name: start-unzip-oss
-Version: 0.0.18
+Version: 0.0.19
 Provider:
   - 阿里云
 Description: 使用函数计算自动解压上传到OSS指定前缀目录的zip文件
@@ -28,6 +28,7 @@ Parameters:
     - prefix
     - processedDir
     - retainFileName
+    - triggerRoleArn
   properties:
     region:
       title: 地域
@@ -110,12 +111,12 @@ Parameters:
     triggerRoleArn:
       title: 触发器RAM角色ARN
       type: string
-      default: ""
+      default: AliyunOSSEventNotificationRole
       pattern: "^acs:ram::[0-9]*:role/.*$"
       description: OSS使用此角色来发送事件通知来调用函数
       required: true
       x-role:
-        name: aliyunosseventnotificationrole
+        name: AliyunOSSEventNotificationRole
         service: OSS
         authorities:
           - AliyunFCInvocationAccess
