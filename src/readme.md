@@ -1,16 +1,16 @@
 
-> 注：当前项目为 Serverless Devs 应用，由于应用中会存在需要初始化才可运行的变量（例如应用部署地区、服务名、函数名等等），所以**不推荐**直接 Clone 本仓库到本地进行部署或直接复制 s.yaml 使用，**强烈推荐**通过 `s init ` 的方法或应用中心进行初始化，详情可参考[部署 & 体验](#部署--体验) 。
+> 注：当前项目为 Serverless Devs 应用，由于应用中会存在需要初始化才可运行的变量（例如应用部署地区、函数名等等），所以**不推荐**直接 Clone 本仓库到本地进行部署或直接复制 s.yaml 使用，**强烈推荐**通过 `s init ${模版名称}` 的方法或应用中心进行初始化，详情可参考[部署 & 体验](#部署--体验) 。
 
-# start-unzip-oss 帮助文档
+# start-unzip-oss-v3 帮助文档
 <p align="center" class="flex justify-center">
     <a href="https://www.serverless-devs.com" class="ml-1">
-    <img src="http://editor.devsapp.cn/icon?package=start-unzip-oss&type=packageType">
+    <img src="http://editor.devsapp.cn/icon?package=start-unzip-oss-v3&type=packageType">
   </a>
-  <a href="http://www.devsapp.cn/details.html?name=start-unzip-oss" class="ml-1">
-    <img src="http://editor.devsapp.cn/icon?package=start-unzip-oss&type=packageVersion">
+  <a href="http://www.devsapp.cn/details.html?name=start-unzip-oss-v3" class="ml-1">
+    <img src="http://editor.devsapp.cn/icon?package=start-unzip-oss-v3&type=packageVersion">
   </a>
-  <a href="http://www.devsapp.cn/details.html?name=start-unzip-oss" class="ml-1">
-    <img src="http://editor.devsapp.cn/icon?package=start-unzip-oss&type=packageDownload">
+  <a href="http://www.devsapp.cn/details.html?name=start-unzip-oss-v3" class="ml-1">
+    <img src="http://editor.devsapp.cn/icon?package=start-unzip-oss-v3&type=packageDownload">
   </a>
 </p>
 
@@ -22,7 +22,7 @@
 
 <codeUrl>
 
-- [:smiley_cat: 代码](https://github.com/devsapp/start-unzip-oss/tree/main/src)
+- [:smiley_cat: 代码](https://github.com/devsapp/start-unzip-oss/tree/V3/src)
 
 </codeUrl>
 <preview>
@@ -34,7 +34,7 @@
 
 ## 前期准备
 
-使用该项目，您需要有开通以下服务：
+使用该项目，您需要有开通以下服务并拥有对应权限：
 
 <service>
 
@@ -75,16 +75,16 @@
 
 <appcenter>
    
-- :fire: 通过 [Serverless 应用中心](https://fcnext.console.aliyun.com/applications/create?template=start-unzip-oss) ，
-  [![Deploy with Severless Devs](https://img.alicdn.com/imgextra/i1/O1CN01w5RFbX1v45s8TIXPz_!!6000000006118-55-tps-95-28.svg)](https://fcnext.console.aliyun.com/applications/create?template=start-unzip-oss) 该应用。
+- :fire: 通过 [Serverless 应用中心](https://fcnext.console.aliyun.com/applications/create?template=start-unzip-oss-v3) ，
+  [![Deploy with Severless Devs](https://img.alicdn.com/imgextra/i1/O1CN01w5RFbX1v45s8TIXPz_!!6000000006118-55-tps-95-28.svg)](https://fcnext.console.aliyun.com/applications/create?template=start-unzip-oss-v3) 该应用。
    
 </appcenter>
 <deploy>
     
 - 通过 [Serverless Devs Cli](https://www.serverless-devs.com/serverless-devs/install) 进行部署：
   - [安装 Serverless Devs Cli 开发者工具](https://www.serverless-devs.com/serverless-devs/install) ，并进行[授权信息配置](https://docs.serverless-devs.com/fc/config) ；
-  - 初始化项目：`s init start-unzip-oss -d start-unzip-oss `
-  - 进入项目，并进行项目部署：`cd start-unzip-oss && s deploy - y`
+  - 初始化项目：`s init start-unzip-oss-v3 -d start-unzip-oss-v3`
+  - 进入项目，并进行项目部署：`cd start-unzip-oss-v3 && s deploy -y`
    
 </deploy>
 
@@ -94,20 +94,44 @@
 
 ![](http://image.editor.devsapp.cn/alibaba/4A5uks4sawFd26h9ksuc.png)
 
-匹配解压规则的ZIP文件在上传到OSS后，会自动触发函数计算进行解压。文件解压完成后，会存储至OSS的指定目录中。
+匹配解压规则的 ZIP 文件在上传到 OSS 后，会自动触发函数计算进行解压。文件解压完成后，会存储至 OSS 的指定目录中。
 
 
-## 注意事项
+**注意事项**
 
-- 建议使用UTF-8或GB 2312编码命名您的文件或文件夹，否则可能会出现解压后的文件或文件夹名称出现乱码、解压过程中断等问题。
+- 建议使用 UTF-8 或 GB 2312 编码命名您的文件或文件夹，否则可能会出现解压后的文件或文件夹名称出现乱码、解压过程中断等问题。
 
 - 归档或冷归档类型的文件需先解冻再解压。
 
-- 解压单个压缩包的最大时间是2小时，超过2小时未完成的任务会解压失败。
+- 解压单个压缩包的最大时间是 2 小时，超过 2 小时未完成的任务会解压失败。
 
-- 建议ZIP包里面的单文件大小最好不超过1 GB，否则可能解压失败。如果出现这个场景， 请参考：[unzip-oss-with-nas](https://github.com/zhaohang88/unzip-oss-nas)
+- 建议 ZIP 包里面的单文件大小最好不超过 1 GB，否则可能解压失败。如果出现这个场景， 请参考：[unzip-oss-with-nas](https://github.com/zhaohang88/unzip-oss-nas)
 
-- 默认设置的函数执行时长为2h， 如果不满足需求， 自己直接调整函数的 timeout,  最大可到 24h
+- 默认设置的函数执行时长为 2h， 如果不满足需求， 自己直接调整函数的 timeout, 最大可到 24h
+
+
+**参数说明**
+
+![](http://image.editor.devsapp.cn/alibaba/kD1lbEw48Er4s27212ri.png)
+
+
+** 配置示例**
+
+![](http://image.editor.devsapp.cn/alibaba/lASAfezjvifa9Cwawht6.png)
+
+
+**二次开发示例**
+
+上面的示例, 解压保存回去的都还是本身触发函数的 OSS， 如果是保存到其他 OSS， 直接将 `bucket.put_object(newKey + name, file_obj)`  这样上传回 oss 的代码修改下即可， 比如：
+
+
+```python
+auth = oss2.Auth('<yourAccessKeyId>', '<yourAccessKeySecret>')
+dst_bucket_name = "xxx-bucket"
+dst_bucket = oss2.Bucket(auth, endpoint, dst_bucket_name)
+dst_bucket.put_object(newKey +  name, file_obj)
+
+```
 
 
 </appdetail>
@@ -115,29 +139,6 @@
 ## 使用文档
 
 <usedetail id="flushContent">
-
-
-## 参数说明
-
-
-![](http://image.editor.devsapp.cn/alibaba/kD1lbEw48Er4s27212ri.png)
-
-
-## 配置示例
-![](http://image.editor.devsapp.cn/alibaba/lASAfezjvifa9Cwawht6.png)
-
-
-## 二次开发示例
-上面的示例, 解压保存回去的都还是本身触发函数的 OSS， 如果是保存到其他 OSS， 直接将 `bucket.put_object(newKey + name, file_obj)` 这样上传回 oss 的代码修改下即可， 比如：
-
-```python
-auth = oss2.Auth('<yourAccessKeyId>', '<yourAccessKeySecret>')
-dst_bucket_name = "xxx-bucket"
-dst_bucket = oss2.Bucket(auth, endpoint, dst_bucket_name)  
-dst_bucket.put_object(newKey +  name, file_obj)
-
-```
-
 </usedetail>
 
 
@@ -155,3 +156,6 @@ dst_bucket.put_object(newKey +  name, file_obj)
 | <center>微信公众号：`serverless`</center>                                                                                         | <center>微信小助手：`xiaojiangwh`</center>                                                                                        | <center>钉钉交流群：`33947367`</center>                                                                                           |
 </p>
 </devgroup>
+
+<testEvent>
+</testEvent>

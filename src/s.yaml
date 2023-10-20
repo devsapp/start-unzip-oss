@@ -1,84 +1,66 @@
 # ------------------------------------
-# ------------------------------------
 #   If you need English case, you can refer to [s_en.yaml] file
 # ------------------------------------
 #   欢迎您使用阿里云函数计算 FC 组件进行项目开发
-#   组件仓库地址：https://github.com/devsapp/fc
-#   组件帮助文档：https://www.serverless-devs.com/fc/readme
-#   Yaml参考文档：https://www.serverless-devs.com/fc/yaml/readme
-#   关于：
-#      - Serverless Devs和FC组件的关系、如何声明/部署多个函数、超过50M的代码包如何部署
-#      - 关于.fcignore使用方法、工具中.s目录是做什么、函数进行build操作之后如何处理build的产物
-#   等问题，可以参考文档：https://www.serverless-devs.com/fc/tips
+#   组件仓库地址：https://github.com/devsapp/fc3
+#   组件帮助文档：https://github.com/devsapp/fc3/blob/master/docs/zh/readme.md
+#   Yaml参考文档：https://github.com/devsapp/fc3/blob/master/docs/zh/yaml/readme.md
+#   关于Serverless Devs和FC组件的关系、如何声明/部署多个函数等问题，可以参考文档：https://github.com/devsapp/fc3/blob/master/docs/zh/tips.md
 #   关于如何做CICD等问题，可以参考：https://www.serverless-devs.com/serverless-devs/cicd
 #   关于如何进行环境划分等问题，可以参考：https://www.serverless-devs.com/serverless-devs/extend
 #   更多函数计算案例，可参考：https://github.com/devsapp/awesome/
 #   有问题快来钉钉群问一下吧：33947367
-edition: 1.0.0
+# ------------------------------------
+edition: 3.0.0
 name: UnZip OSS
-# access 是当前应用所需要的密钥信息配置：
-# 密钥配置可以参考：https://www.serverless-devs.com/serverless-devs/command/config
-# 密钥使用顺序可以参考：https://www.serverless-devs.com/serverless-devs/tool#密钥使用顺序与规范
-access: "{{ access }}"
-
+access: '{{ access }}'
 vars:
-  region: "{{ region }}" # 关于变量的使用方法，可以参考：https://www.serverless-devs.com/serverless-devs/yaml#变量赋值
-  service:
-    name: "{{ serviceName }}"
-    description: unzip oss sample
-    internetAccess: true
-    role: "{{ roleArn }}"
-
-services:
+  region: '{{ region }}'
+resources:
   fc-zip-oss-service:
-    component: fc
+    component: fc3
     props:
       region: ${vars.region}
-      service: ${vars.service}
-      function:
-        name: "{{ functionName }}"
-        handler: index.handler
-        timeout: 7200
-        runtime: python3
-        codeUri: ./code
-        memorySize: 3072
-        environmentVariables:
-          PROCESSED_DIR: "{{ processedDir }}"
-          RETAIN_FILE_NAME: "{{ retainFileName }}"
-        # 如果是很大的 ZIP 文件， 想使用异步调用，可以开启如下配置,  将每次函数调用看做一个任务执行
-        asyncConfiguration:
-          destination:
-            #   onSuccess: acs:fc:::services/${vars.service.name}/functions/dest-succ
-            onFailure: acs:fc:::services/${vars.service.name}/functions/dest-fail
-          maxAsyncEventAgeInSeconds: 7200
-          maxAsyncRetryAttempts: 3
-          statefulInvocation: true
       triggers:
-        - name: unzip-oss-trigger
-          type: oss
-          role: "{{ triggerRoleArn }}"
-          config:
+        - triggerName: unzip-oss-trigger
+          triggerType: oss
+          triggerConfig:
             events:
               - oss:ObjectCreated:PutObject
               - oss:ObjectCreated:PostObject
               - oss:ObjectCreated:CompleteMultipartUpload
               - oss:ObjectCreated:PutSymlink
             filter:
-              Key:
-                Prefix: "{{ prefix }}"
-                Suffix: .zip
-            bucketName: "{{ bucketName }}"
-
+              key:
+                prefix: '{{ prefix }}'
+                suffix: .zip
+          invocationRole: '{{ triggerRoleArn }}'
+          sourceArn: acs:oss:${this.props.region}:${config("AccountID")}:{{ bucketName }}
+      handler: index.handler
+      timeout: 7200
+      runtime: python3
+      memorySize: 3072
+      environmentVariables:
+        PROCESSED_DIR: '{{ processedDir }}'
+        RETAIN_FILE_NAME: '{{ retainFileName }}'
+      internetAccess: true
+      role: '{{ roleArn }}'
+      functionName: '{{ functionName }}'
+      code: ./code
+      asyncInvokeConfig:
+        destinationConfig:
+          onFailure:
+            destination: acs:fc:${this.props.region}::functions/dest-fail
+        maxAsyncEventAgeInSeconds: 7200
+        maxAsyncRetryAttempts: 3
   dest-fail:
-    component: fc
+    component: fc3
     props:
       region: ${vars.region}
-      service: ${vars.service}
-      function:
-        name: dest-fail
-        description: "async task destination fail function by serverless devs"
-        runtime: python3
-        codeUri: ./fail
-        handler: index.handler
-        memorySize: 512
-        timeout: 60
+      description: async task destination fail function by serverless devs
+      runtime: python3
+      handler: index.handler
+      memorySize: 512
+      timeout: 60
+      functionName: dest-fail
+      code: ./fail
