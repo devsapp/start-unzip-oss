@@ -16,7 +16,7 @@
 
 <description>
 
-使用函数计算自动解压上传到OSS指定前缀目录的zip文件
+本案例是将解压zip文件工具 unzip，快速创建并部署到阿里云函数计算 FC。
 
 </description>
 
@@ -40,24 +40,12 @@
 
 
 
-| 服务 |  备注  |
-| --- |  --- |
-| 函数计算 FC |  unzip解压函数部署在函数计算 |
-| 对象存储 OSS |  待解压的zip文件和解压后的文件存放在对象存储 |
+| 服务/业务 |  权限  | 相关文档 |
+| --- |  --- | --- |
+| 函数计算 |  AliyunFCFullAccess | [帮助文档](https://help.aliyun.com/product/2508973.html) [计费文档](https://help.aliyun.com/document_detail/2512928.html) |
+| 对象存储 |  AliyunOSSFullAccess | [帮助文档](https://help.aliyun.com/zh/oss) [计费文档](https://help.aliyun.com/zh/oss/product-overview/billing) |
 
 </service>
-
-推荐您拥有以下的产品权限 / 策略：
-<auth>
-
-
-
-| 服务/业务 |  权限 |  备注  |
-| --- |  --- |   --- |
-| 函数计算 | AliyunFCFullAccess |  创建和更新 unzip 解压函数 |
-| OSS | AliyunOSSFullAccess |  创建或更新 unzip 解压函数的 OSS 触发器 |
-
-</auth>
 
 <remark>
 
@@ -88,16 +76,13 @@
    
 </deploy>
 
-## 应用详情
+## 案例介绍
 
 <appdetail id="flushContent">
 
-![](http://image.editor.devsapp.cn/alibaba/4A5uks4sawFd26h9ksuc.png)
+本案例是将zip文件进行 unzip 解压，快速创建并部署到阿里云函数计算 FC。
 
-匹配解压规则的 ZIP 文件在上传到 OSS 后，会自动触发函数计算进行解压。文件解压完成后，会存储至 OSS 的指定目录中。
-
-
-**注意事项**
+匹配解压规则的ZIP文件在上传到OSS后，会自动触发函数计算进行解压。文件解压完成后，会存储至OSS的指定目录中。
 
 - 建议使用 UTF-8 或 GB 2312 编码命名您的文件或文件夹，否则可能会出现解压后的文件或文件夹名称出现乱码、解压过程中断等问题。
 
@@ -107,23 +92,44 @@
 
 - 建议 ZIP 包里面的单文件大小最好不超过 1 GB，否则可能解压失败。如果出现这个场景， 请参考：[unzip-oss-with-nas](https://github.com/zhaohang88/unzip-oss-nas)
 
-- 默认设置的函数执行时长为 2h， 如果不满足需求， 自己直接调整函数的 timeout, 最大可到 24h
+- 默认设置的函数执行时长为2h， 如果不满足需求， 自己直接调整函数的 timeout,  最大可到 24h
+
+![](http://image.editor.devsapp.cn/alibaba/4A5uks4sawFd26h9ksuc.png)
+
+</appdetail>
+
+## 使用流程
+
+<usedetail id="flushContent">
+
+### 查看部署的案例
+
+部署时， 选择的OSS存储桶名，以及前缀名，如：
+
+![](https://img.alicdn.com/imgextra/i4/O1CN01KYL4lB1Obdl63LB39_!!6000000001724-0-tps-2336-1108.jpg)
 
 
-**参数说明**
+部署完成后，在oss对象存储中找到相应的OSS存储桶名，向该存储桶上传zip文件，如：
+
+![](https://img.alicdn.com/imgextra/i2/O1CN01ew8GAi1pDomkNrcuC_!!6000000005327-0-tps-1874-850.jpg)
+
+在控制台就可以查看到调用日志，如：
+
+![](https://img.alicdn.com/imgextra/i4/O1CN01Yv7Jsc1UJfur6G0WU_!!6000000002497-0-tps-2842-776.jpg)
+
+#### 参数说明
 
 ![](http://image.editor.devsapp.cn/alibaba/kD1lbEw48Er4s27212ri.png)
 
 
-** 配置示例**
-
+#### 配置示例
 ![](http://image.editor.devsapp.cn/alibaba/lASAfezjvifa9Cwawht6.png)
 
 
-**二次开发示例**
+### 二次开发
+您可以通过云端控制台的开发功能进行二次开发。如果您之前是在本地创建的项目案例，也可以在本地项目目录`start-unzip-oss-v3`文件夹下，对项目进行二次开发。开发完成后，可以通过`s deploy`进行快速部署。
 
-上面的示例, 解压保存回去的都还是本身触发函数的 OSS， 如果是保存到其他 OSS， 直接将 `bucket.put_object(newKey + name, file_obj)`  这样上传回 oss 的代码修改下即可， 比如：
-
+上面的示例, 解压保存回去的都还是本身触发函数的 OSS， 如果是保存到其他 OSS， 直接将 `bucket.put_object(newKey + name, file_obj)` 这样上传回 oss 的代码修改下即可， 比如：
 
 ```python
 auth = oss2.Auth('<yourAccessKeyId>', '<yourAccessKeySecret>')
@@ -133,13 +139,12 @@ dst_bucket.put_object(newKey +  name, file_obj)
 
 ```
 
-
-</appdetail>
-
-## 使用文档
-
-<usedetail id="flushContent">
 </usedetail>
+
+## 注意事项
+
+<matters id="flushContent">
+</matters>
 
 
 <devgroup>
@@ -156,6 +161,3 @@ dst_bucket.put_object(newKey +  name, file_obj)
 | <center>微信公众号：`serverless`</center>                                                                                         | <center>微信小助手：`xiaojiangwh`</center>                                                                                        | <center>钉钉交流群：`33947367`</center>                                                                                           |
 </p>
 </devgroup>
-
-<testEvent>
-</testEvent>
