@@ -1,0 +1,15 @@
+services: #服务变量
+  fc_zip_oss: 
+    processedDir:
+      title: 解压目标目录
+      type: string
+      default: dst
+      description: 将匹配到的文件解压到此目标目录下。为防止循环触发产生不必要的费用，建议您设置不同于前缀的目标目录。
+    retainFileName:
+      title: 是否保留压缩文件名为路径目录
+      type: string
+      default: "false"
+      description: 是否保留压缩文件名为路径目录？ 若为 true, 您的目标目录为target, 压缩文件名为source.zip, 则解压后文件路径为target/source/..., 否则为 target/...。
+      enum:
+        - "true"
+        - "false"
