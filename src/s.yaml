@@ -35,6 +35,7 @@ resources:
       role: '{{ roleArn }}'
       functionName: '{{ functionName }}'
       code: ./code
+      logConfig: auto
       asyncInvokeConfig:
         destinationConfig:
           onFailure:
@@ -53,3 +54,4 @@ resources:
       timeout: 60
       functionName: fc_zip_oss_dest_fail
       code: ./fail
+      logConfig: auto

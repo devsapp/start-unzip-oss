@@ -87,18 +87,9 @@
 
 ### 查看部署的案例
 
-部署时， 选择的OSS存储桶名，以及前缀名，如：
+- 部署时， 选择的OSS存储桶名、触发的前缀目录名以及解压后的目录
 
-![](https://img.alicdn.com/imgextra/i4/O1CN01KYL4lB1Obdl63LB39_!!6000000001724-0-tps-2336-1108.jpg)
-
-
-部署完成后，在oss对象存储中找到相应的OSS存储桶名，向该存储桶上传zip文件，如：
-
-![](https://img.alicdn.com/imgextra/i2/O1CN01ew8GAi1pDomkNrcuC_!!6000000005327-0-tps-1874-850.jpg)
-
-在控制台就可以查看到调用日志，如：
-
-![](https://img.alicdn.com/imgextra/i4/O1CN01Yv7Jsc1UJfur6G0WU_!!6000000002497-0-tps-2842-776.jpg)
+- 部署完成后，在oss对象存储中找到相应的OSS存储桶名，向该存储桶指定前缀目录上传zip文件，等一会， 可以在解压后的目录查看到解压后的文件及文件夹
 
 #### 参数说明
 
