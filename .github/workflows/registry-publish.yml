@@ -6,9 +6,11 @@ on:
       - dipper
 
 jobs:
-  deploy:
+  release:
     runs-on: ubuntu-latest
     steps:
+      - run: git config --global core.symlinks false
+        shell: bash
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v2
         with:
