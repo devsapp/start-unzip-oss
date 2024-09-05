@@ -1,5 +1,5 @@
 services: #服务变量
-  fc_zip_oss: 
+  fc_unzip_oss: 
     processedDir:
       title: 解压目标目录
       type: string

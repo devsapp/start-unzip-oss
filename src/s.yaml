@@ -5,7 +5,7 @@ vars:
   region: '{{ region }}'
 
 resources:
-  fc_zip_oss:
+  fc_unzip_oss:
     component: fc3
     props:
       region: ${vars.region}
@@ -27,7 +27,9 @@ resources:
       handler: index.handler
       timeout: 7200
       runtime: python3
-      memorySize: 3072
+      memorySize: 4096
+      cpu: 2.0
+      diskSize: 512
       environmentVariables:
         PROCESSED_DIR: '{{ processedDir }}'
         RETAIN_FILE_NAME: '{{ retainFileName }}'
@@ -39,11 +41,11 @@ resources:
       asyncInvokeConfig:
         destinationConfig:
           onFailure:
-            destination: acs:fc:${this.props.region}::functions/fc_zip_oss_dest_fail
+            destination: acs:fc:${this.props.region}::functions/fc_unzip_oss_dest_fail
         maxAsyncEventAgeInSeconds: 7200
         maxAsyncRetryAttempts: 3
   
-  fc_zip_oss_dest_fail:
+  fc_unzip_oss_dest_fail:
     component: fc3
     props:
       region: ${vars.region}
@@ -52,6 +54,6 @@ resources:
       handler: index.handler
       memorySize: 512
       timeout: 60
-      functionName: fc_zip_oss_dest_fail
+      functionName: fc_unzip_oss_dest_fail
       code: ./fail
       logConfig: auto

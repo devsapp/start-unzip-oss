@@ -32,7 +32,7 @@
 | 服务/业务 |  权限  | 相关文档 |
 | --- |  --- | --- |
 | 函数计算 |  AliyunFCFullAccess | [帮助文档](https://help.aliyun.com/product/2508973.html) [计费文档](https://help.aliyun.com/document_detail/2512928.html) |
-| 对象存储 |  AliyunOSSFullAccess | [帮助文档](https://help.aliyun.com/zh/oss) [计费文档](https://help.aliyun.com/zh/oss/product-overview/billing) |
+| 对象存储 |  AliyunFCServerlessDevsRolePolicy | [帮助文档](https://help.aliyun.com/zh/oss) [计费文档](https://help.aliyun.com/zh/oss/product-overview/billing) |
 
 </service>
 
@@ -52,11 +52,12 @@
 
 <appcenter>
    
-:fire: 通过 [Dipper 应用中心](https://devs.console.aliyun.com/applications/createtemplate=start-unzip-oss-dipper) ，[![Deploy with Severless Devs](https://img.alicdn.com/imgextra/i1/O1CN01w5RFbX1v45s8TIXPz_!!6000000006118-55-tps-95-28.svg)](https://devs.console.aliyun.com/applications/createtemplate=start-unzip-oss-dipper) 该应用。
+- :fire: 通过 [Dipper 应用中心](https://devs.console.aliyun.com/applications/create?template=start-unzip-oss-dipper) ，[![Deploy with Severless Devs](https://img.alicdn.com/imgextra/i1/O1CN01w5RFbX1v45s8TIXPz_!!6000000006118-55-tps-95-28.svg)](https://devs.console.aliyun.com/applications/create?template=start-unzip-oss-dipper) 该应用。
    
 </appcenter>
 <deploy>
-
+    
+   
 </deploy>
 
 ## 案例介绍
@@ -77,7 +78,7 @@
 
 - 默认设置的函数执行时长为2h， 如果不满足需求， 自己直接调整函数的 timeout,  最大可到 24h
 
-![](http://image.editor.devsapp.cn/alibaba/4A5uks4sawFd26h9ksuc.png)
+![](https://img.alicdn.com/imgextra/i3/O1CN01al4FeD1HEYX4BHZzk_!!6000000000726-2-tps-897-203.png)
 
 </appdetail>
 
@@ -93,11 +94,11 @@
 
 #### 参数说明
 
-![](http://image.editor.devsapp.cn/alibaba/kD1lbEw48Er4s27212ri.png)
+![](https://img.alicdn.com/imgextra/i3/O1CN01TAgJNt1ro7S9uDQVU_!!6000000005677-0-tps-1117-327.jpg)
 
 
 #### 配置示例
-![](http://image.editor.devsapp.cn/alibaba/lASAfezjvifa9Cwawht6.png)
+![](https://img.alicdn.com/imgextra/i2/O1CN01gl3MYd1JkjaddezEO_!!6000000001067-0-tps-1121-868.jpg)
 
 
 ### 二次开发
@@ -124,11 +125,11 @@ dst_bucket.put_object(newKey +  name, file_obj)
 
 ## 开发者社区
 
-您如果有关于错误的反馈或者未来的期待，您可以在 [Serverless Devs repo Issues](https://github.com/serverless-devs/serverless-devs/issues) 中进行反馈和交流。如果您想要加入我们的讨论组或者了解 FC 组件的最新动态，您可以通过以下渠道进行：
+您如果有关于错误的反馈或者未来的期待，您可以在 [Serverless Devs repo Issues](https://github.com/serverless-devs/serverless-devs/issues) 中进行反馈和交流。如果您想要加入我们的讨论组或者了解最新动态，您可以通过以下渠道进行：
 
 <p align="center">  
 
-| <img src="https://serverless-article-picture.oss-cn-hangzhou.aliyuncs.com/1635407298906_20211028074819117230.png" width="130px" > | <img src="https://serverless-article-picture.oss-cn-hangzhou.aliyuncs.com/1635407044136_20211028074404326599.png" width="130px" > | <img src="https://images.devsapp.cn/fc-faq/33947367.png" width="130px" > |
+| <img src="https://img.alicdn.com/imgextra/i2/O1CN010Sk7sv1Xl6WuOb6uU_!!6000000002963-0-tps-666-662.jpg" width="130px" > | <img src="https://img.alicdn.com/imgextra/i2/O1CN01ATrYb8283GOwhAQzZ_!!6000000007876-0-tps-574-560.jpg" width="130px" > | <img src="https://img.alicdn.com/imgextra/i4/O1CN010Vt5aw27VN5rJIguB_!!6000000007802-0-tps-668-630.jpg" width="130px" > |
 | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | <center>微信公众号：`serverless`</center>                                                                                         | <center>微信小助手：`xiaojiangwh`</center>                                                                                        | <center>钉钉交流群：`33947367`</center>                                                                                           |
 </p>
