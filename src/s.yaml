@@ -28,7 +28,7 @@ resources:
       timeout: 7200
       runtime: python3
       memorySize: 4096
-      cpu: 2.0
+      cpu: 2
       diskSize: 512
       environmentVariables:
         PROCESSED_DIR: '{{ processedDir }}'
