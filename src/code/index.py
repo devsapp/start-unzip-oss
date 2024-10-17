@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 声明：
 这个函数针对文件和文件夹命名编码是如下格式：
 1. mac/linux 系统， 默认是utf-8
@@ -16,38 +16,20 @@ This function names and encodes files and folders as follows:
 For other encodings, we try to use the chardet library for coding judgment here, 
 but this is not guaranteed to be 100% correct. 
 If necessary to rewrite this function, and ensure that the debugging pass
-'''
+"""
 
-import helper
 import oss2
 import json
 import os
-import time
 import logging
+import zipfile
 import chardet
 
-"""
-When a source/ prefix object is placed in an OSS, it is hoped that the object will be decompressed and then stored in the OSS as processed/ prefixed.
-For example, source/a.zip will be processed as processed/a/... 
-"Source /", "processed/" can be changed according to the user's requirements.
-"""
 # Close the info log printed by the oss SDK
 logging.getLogger("oss2.api").setLevel(logging.ERROR)
 logging.getLogger("oss2.auth").setLevel(logging.ERROR)
 
 LOGGER = logging.getLogger()
-
-# a decorator for print the excute time of a function
-
-
-def print_excute_time(func):
-    def wrapper(*args, **kwargs):
-        local_time = time.time()
-        ret = func(*args, **kwargs)
-        LOGGER.info('current Function [%s] excute time is %.2f' %
-                    (func.__name__, time.time() - local_time))
-        return ret
-    return wrapper
 
 
 def get_zipfile_name(origin_name):  # 解决中文乱码问题
@@ -61,7 +43,9 @@ def get_zipfile_name(origin_name):  # 解决中文乱码问题
     detect = chardet.detect(name_bytes)
     confidence = detect["confidence"]
     detect_encoding = detect["encoding"]
-    if confidence > 0.75 and (detect_encoding.lower() in ["gb2312", "gbk", "gb18030", "ascii", "utf-8"]):
+    if confidence > 0.75 and (
+        detect_encoding.lower() in ["gb2312", "gbk", "gb18030", "ascii", "utf-8"]
+    ):
         try:
             if detect_encoding.lower() in ["gb2312", "gbk", "gb18030"]:
                 detect_encoding = "gb18030"
@@ -78,7 +62,6 @@ def get_zipfile_name(origin_name):  # 解决中文乱码问题
     return name
 
 
-@print_excute_time
 def handler(event, context):
     """
     The object from OSS will be decompressed automatically .
@@ -92,26 +75,38 @@ def handler(event, context):
     evt_lst = json.loads(event)
     creds = context.credentials
     auth = oss2.StsAuth(
-        creds.access_key_id,
-        creds.access_key_secret,
-        creds.security_token)
+        creds.access_key_id, creds.access_key_secret, creds.security_token
+    )
 
-    evt = evt_lst['events'][0]
-    bucket_name = evt['oss']['bucket']['name']
-    endpoint = 'oss-' + evt['region'] + '-internal.aliyuncs.com'
+    evt = evt_lst["events"][0]
+    bucket_name = evt["oss"]["bucket"]["name"]
+    endpoint = "oss-" + evt["region"] + "-internal.aliyuncs.com"
     bucket = oss2.Bucket(auth, endpoint, bucket_name)
-    object_name = evt['oss']['object']['key']
+    object_name = evt["oss"]["object"]["key"]
+    object_sizeMB = evt["oss"]["object"]["size"] / 1024 / 1024
+    LOGGER.info("{} size is = {}MB".format(object_name, object_sizeMB))
 
-    if "ObjectCreated:PutSymlink" == evt['eventName']:
-        object_name = bucket.get_symlink(object_name).target_key
-        if object_name == "":
-            raise RuntimeError('{} is invalid symlink file'.format(
-                evt['oss']['object']['key']))
+    if object_sizeMB > 10240 * 0.9:
+        raise RuntimeError(
+            "{} size is too large; please use NAS, refer: https://github.com/zhaohang88/unzip-oss-nas".format(
+                object_name
+            )
+        )
 
     file_type = os.path.splitext(object_name)[1]
-
     if file_type != ".zip":
-        raise RuntimeError('{} filetype is not zip'.format(object_name))
+        raise RuntimeError("{} filetype is not zip".format(object_name))
+
+    if "ObjectCreated:PutSymlink" == evt["eventName"]:
+        object_name = bucket.get_symlink(object_name).target_key
+        if object_name == "":
+            raise RuntimeError(
+                "{} is invalid symlink file".format(evt["oss"]["object"]["key"])
+            )
+
+    file_type = os.path.splitext(object_name)[1]
+    if file_type != ".zip":
+        raise RuntimeError("{} filetype is not zip".format(object_name))
 
     LOGGER.info("start to decompress zip file = {}".format(object_name))
 
@@ -119,18 +114,41 @@ def handler(event, context):
     zip_name = lst[-1]
     PROCESSED_DIR = os.environ.get("PROCESSED_DIR", "")
     RETAIN_FILE_NAME = os.environ.get("RETAIN_FILE_NAME", "")
-    if PROCESSED_DIR and PROCESSED_DIR[-1] != "/":
-        PROCESSED_DIR += "/"
     if RETAIN_FILE_NAME == "false":
-        newKey = PROCESSED_DIR
+        newKeyPrefix = PROCESSED_DIR
     else:
-        newKey = PROCESSED_DIR + zip_name
+        newKeyPrefix = os.path.join(PROCESSED_DIR, zip_name)
+    newKeyPrefix = newKeyPrefix.replace(".zip", "/")
 
-    zip_fp = helper.OssStreamFileLikeObject(bucket, object_name)
-    newKey = newKey.replace(".zip", "/")
+    tmpWorkDir = "/tmp/{}".format(context.request_id)
+    if not os.path.exists(tmpWorkDir):
+        os.makedirs(tmpWorkDir)
 
-    with helper.zipfile_support_oss.ZipFile(zip_fp) as zip_file:
-        for name in zip_file.namelist():
-            with zip_file.open(name) as file_obj:
-                name = get_zipfile_name(name)
-                bucket.put_object(newKey + name, file_obj)
+    tmpZipfile = os.path.join(tmpWorkDir, zip_name)
+    bucket.get_object_to_file(object_name, tmpZipfile)
+
+    try:
+        with zipfile.ZipFile(tmpZipfile) as zip_file:
+            for file_info in zip_file.infolist():
+                if file_info.is_dir():
+                    continue
+                f_size = file_info.file_size
+                if (
+                    object_sizeMB + f_size / 1024 / 1024 > 10240 * 0.99
+                ):  # if zip file + one file size > 0.99G, skip extract and upload
+                    LOGGER.error(
+                        "{} size is too large; skip extract and upload".format(f)
+                    )
+                    continue
+                zip_file.extract(file_info.filename, tmpWorkDir)
+                pathname = os.path.join(tmpWorkDir, file_info.filename)
+                newkey = os.path.join(
+                    newKeyPrefix, get_zipfile_name(file_info.filename)
+                )
+                LOGGER.info("upload to {}".format(newkey))
+                bucket.put_object_from_file(newkey, pathname)
+                os.remove(pathname)
+    except Exception as e:
+        LOGGER.error(e)
+    finally:
+        os.remove(tmpZipfile)
