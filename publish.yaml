@@ -1,7 +1,7 @@
 Edition: 3.0.0
 Type: Project
 Name: start-unzip-oss-cap
-Version: 0.0.6
+Version: 0.0.7
 Provider:
   - 阿里云
 Description: 本案例展示了如何将ZIP文件进行解压，快速创建并部署到云原生应用开发平台 CAP。匹配解压规则的ZIP文件在上传到OSS，会自动触发解压，解压完成后存储至OSS指定目录中。

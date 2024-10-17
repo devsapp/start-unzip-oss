@@ -62,11 +62,9 @@
 
 - 归档或冷归档类型的文件需先解冻再解压。
 
-- 解压单个压缩包的最大时间是 6 小时，超过 6 小时未完成的任务会解压失败。
+- 建议 ZIP 包 + zip包里面最大单文件的大小之和不要超过 10 GB，否则解压失败。如果出现这个场景， 请参考：[unzip-oss-with-nas](https://github.com/zhaohang88/unzip-oss-nas)
 
-- 建议 ZIP 包里面的单文件大小最好不超过 1 GB，否则可能解压失败。如果出现这个场景， 请参考：[unzip-oss-with-nas](https://github.com/zhaohang88/unzip-oss-nas)
-
-- 默认设置的函数执行时长为6h， 如果不满足需求， 自己直接调整函数的 timeout,  最大可到 24h
+- 默认设置的函数执行时长为6小时， 如果不满足需求， 自己直接调整函数的 timeout,  最大可到 24小时
 
     ![](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5901957271/CAEQNBiBgMCKx9z24RgiIGMyMTE2ZDczNmNkYjQ2ZmI4MDNkYmYwMDIyZWE0ODkx3963382_20230830144006.372.svg)
 
