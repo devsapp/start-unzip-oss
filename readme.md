@@ -62,13 +62,13 @@
 
 - 归档或冷归档类型的文件需先解冻再解压。
 
-- 解压单个压缩包的最大时间是 2 小时，超过 2 小时未完成的任务会解压失败。
+- 解压单个压缩包的最大时间是 6 小时，超过 6 小时未完成的任务会解压失败。
 
 - 建议 ZIP 包里面的单文件大小最好不超过 1 GB，否则可能解压失败。如果出现这个场景， 请参考：[unzip-oss-with-nas](https://github.com/zhaohang88/unzip-oss-nas)
 
-- 默认设置的函数执行时长为2h， 如果不满足需求， 自己直接调整函数的 timeout,  最大可到 24h
+- 默认设置的函数执行时长为6h， 如果不满足需求， 自己直接调整函数的 timeout,  最大可到 24h
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01al4FeD1HEYX4BHZzk_!!6000000000726-2-tps-897-203.png)
+    ![](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5901957271/CAEQNBiBgMCKx9z24RgiIGMyMTE2ZDczNmNkYjQ2ZmI4MDNkYmYwMDIyZWE0ODkx3963382_20230830144006.372.svg)
 
 </appdetail>
 
@@ -84,11 +84,11 @@
 
 #### 参数说明
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01TAgJNt1ro7S9uDQVU_!!6000000005677-0-tps-1117-327.jpg)
+![](https://img.alicdn.com/imgextra/i3/O1CN014DqNwc1jgmBgXBzqW_!!6000000004578-0-tps-1592-760.jpg)
 
 
 #### 配置示例
-![](https://img.alicdn.com/imgextra/i2/O1CN01gl3MYd1JkjaddezEO_!!6000000001067-0-tps-1121-868.jpg)
+![](https://img.alicdn.com/imgextra/i4/O1CN01WYPc2X1wcjhUAXa65_!!6000000006329-0-tps-1596-876.jpg)
 
 
 ### 二次开发
@@ -107,4 +107,7 @@ dst_bucket.put_object(newKey +  name, file_obj)
 ## 注意事项
 
 <matters id="flushContent">
+
+    
+
 </matters>
