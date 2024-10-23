@@ -2,17 +2,6 @@
 > 注：当前项目为 Serverless Devs 应用，由于应用中会存在需要初始化才可运行的变量（例如应用部署地区、函数名等等），所以**不推荐**直接 Clone 本仓库到本地进行部署或直接复制 s.yaml 使用，**强烈推荐**通过 `s init ${模版名称}` 的方法或应用中心进行初始化，详情可参考[部署 & 体验](#部署--体验) 。
 
 # start-unzip-oss-v3 帮助文档
-<p align="center" class="flex justify-center">
-    <a href="https://www.serverless-devs.com" class="ml-1">
-    <img src="http://editor.devsapp.cn/icon?package=start-unzip-oss-v3&type=packageType">
-  </a>
-  <a href="http://www.devsapp.cn/details.html?name=start-unzip-oss-v3" class="ml-1">
-    <img src="http://editor.devsapp.cn/icon?package=start-unzip-oss-v3&type=packageVersion">
-  </a>
-  <a href="http://www.devsapp.cn/details.html?name=start-unzip-oss-v3" class="ml-1">
-    <img src="http://editor.devsapp.cn/icon?package=start-unzip-oss-v3&type=packageDownload">
-  </a>
-</p>
 
 <description>
 
@@ -22,7 +11,7 @@
 
 <codeUrl>
 
-- [:smiley_cat: 代码](https://github.com/devsapp/start-unzip-oss/tree/V3/src)
+
 
 </codeUrl>
 <preview>
@@ -69,8 +58,8 @@
 </appcenter>
 <deploy>
     
-- 通过 [Serverless Devs Cli](https://www.serverless-devs.com/serverless-devs/install) 进行部署：
-  - [安装 Serverless Devs Cli 开发者工具](https://www.serverless-devs.com/serverless-devs/install) ，并进行[授权信息配置](https://docs.serverless-devs.com/fc/config) ；
+- 通过 [Serverless Devs Cli](https://docs.serverless-devs.com/user-guide/install) 进行部署：
+  - [安装 Serverless Devs Cli 开发者工具](https://docs.serverless-devs.com/user-guide/install) ，并进行[授权信息配置]( https://docs.serverless-devs.com/user-guide/config) ；
   - 初始化项目：`s init start-unzip-oss-v3 -d start-unzip-oss-v3`
   - 进入项目，并进行项目部署：`cd start-unzip-oss-v3 && s deploy -y`
    
@@ -88,13 +77,11 @@
 
 - 归档或冷归档类型的文件需先解冻再解压。
 
-- 解压单个压缩包的最大时间是 2 小时，超过 2 小时未完成的任务会解压失败。
+- 建议 ZIP 包 + zip包里面最大单文件的大小之和不要超过 10 GB，否则解压失败。如果出现这个场景， 请参考：[unzip-oss-with-nas](https://github.com/zhaohang88/unzip-oss-nas)
 
-- 建议 ZIP 包里面的单文件大小最好不超过 1 GB，否则可能解压失败。如果出现这个场景， 请参考：[unzip-oss-with-nas](https://github.com/zhaohang88/unzip-oss-nas)
+- 默认设置的函数执行时长为6小时， 如果不满足需求， 自己直接调整函数的 timeout,  最大可到 24小时
 
-- 默认设置的函数执行时长为2h， 如果不满足需求， 自己直接调整函数的 timeout,  最大可到 24h
-
-![](http://image.editor.devsapp.cn/alibaba/4A5uks4sawFd26h9ksuc.png)
+    ![](https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/5901957271/CAEQNBiBgMCKx9z24RgiIGMyMTE2ZDczNmNkYjQ2ZmI4MDNkYmYwMDIyZWE0ODkx3963382_20230830144006.372.svg)
 
 </appdetail>
 
@@ -119,11 +106,10 @@
 
 #### 参数说明
 
-![](http://image.editor.devsapp.cn/alibaba/kD1lbEw48Er4s27212ri.png)
-
+![](https://img.alicdn.com/imgextra/i3/O1CN014DqNwc1jgmBgXBzqW_!!6000000004578-0-tps-1592-760.jpg)
 
 #### 配置示例
-![](http://image.editor.devsapp.cn/alibaba/lASAfezjvifa9Cwawht6.png)
+![](https://img.alicdn.com/imgextra/i4/O1CN01WYPc2X1wcjhUAXa65_!!6000000006329-0-tps-1596-876.jpg)
 
 
 ### 二次开发
@@ -156,8 +142,8 @@ dst_bucket.put_object(newKey +  name, file_obj)
 
 <p align="center">  
 
-| <img src="https://serverless-article-picture.oss-cn-hangzhou.aliyuncs.com/1635407298906_20211028074819117230.png" width="130px" > | <img src="https://serverless-article-picture.oss-cn-hangzhou.aliyuncs.com/1635407044136_20211028074404326599.png" width="130px" > | <img src="https://serverless-article-picture.oss-cn-hangzhou.aliyuncs.com/1635407252200_20211028074732517533.png" width="130px" > |
-| --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| <center>微信公众号：`serverless`</center>                                                                                         | <center>微信小助手：`xiaojiangwh`</center>                                                                                        | <center>钉钉交流群：`33947367`</center>                                                                                           |
+| <img src="https://img.alicdn.com/imgextra/i2/O1CN010Sk7sv1Xl6WuOb6uU_!!6000000002963-0-tps-666-662.jpg" width="130px" > | <img src="https://img.alicdn.com/imgextra/i4/O1CN010Vt5aw27VN5rJIguB_!!6000000007802-0-tps-668-630.jpg" width="130px" > |
+| --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| <center>微信公众号：`serverless`</center>                                                                                         | <center>钉钉交流群：`33947367`</center>                                                                                           |
 </p>
 </devgroup>
