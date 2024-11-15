@@ -33,6 +33,7 @@ resources:
       environmentVariables:
         PROCESSED_DIR: '{{ processedDir }}'
         RETAIN_FILE_NAME: '{{ retainFileName }}'
+        WORK_DIR: "/tmp"
       internetAccess: true
       role: '{{ roleArn }}'
       functionName: '{{ functionName }}'
