@@ -62,7 +62,9 @@ def handler(event, context):
         newKeyPrefix = os.path.join(PROCESSED_DIR, zip_name)
     newKeyPrefix = newKeyPrefix.replace(".zip", "/")
 
-    tmpWorkDir = "/tmp/{}".format(context.request_id)
+    WORK_DIR = os.environ.get("WORK_DIR", "/tmp")
+    tmpWorkDir = "{}/{}".format(WORK_DIR, context.request_id)
+
     if not os.path.exists(tmpWorkDir):
         os.makedirs(tmpWorkDir)
 

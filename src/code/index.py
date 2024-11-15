@@ -24,6 +24,7 @@ import os
 import logging
 import zipfile
 import chardet
+import shutil
 
 # Close the info log printed by the oss SDK
 logging.getLogger("oss2.api").setLevel(logging.ERROR)
@@ -86,9 +87,11 @@ def handler(event, context):
     object_sizeMB = evt["oss"]["object"]["size"] / 1024 / 1024
     LOGGER.info("{} size is = {}MB".format(object_name, object_sizeMB))
 
-    if object_sizeMB > 10240 * 0.9:
+    WORK_DIR = os.environ.get("WORK_DIR", "/tmp")
+
+    if WORK_DIR == "/tmp" and object_sizeMB > 10240 * 0.9:
         raise RuntimeError(
-            "{} size is too large; please use NAS, refer: https://github.com/zhaohang88/unzip-oss-nas".format(
+            "{} size is too large; Please use NAS and set the WORK_DIR environment variable to specify the NAS mount directory. For reference, see: https://help.aliyun.com/zh/functioncompute/fc-3-0/user-guide/configure-a-nas-file-system-1".format(
                 object_name
             )
         )
@@ -120,7 +123,7 @@ def handler(event, context):
         newKeyPrefix = os.path.join(PROCESSED_DIR, zip_name)
     newKeyPrefix = newKeyPrefix.replace(".zip", "/")
 
-    tmpWorkDir = "/tmp/{}".format(context.request_id)
+    tmpWorkDir = "{}/{}".format(WORK_DIR, context.request_id)
     if not os.path.exists(tmpWorkDir):
         os.makedirs(tmpWorkDir)
 
@@ -134,10 +137,11 @@ def handler(event, context):
                     continue
                 f_size = file_info.file_size
                 if (
-                    object_sizeMB + f_size / 1024 / 1024 > 10240 * 0.99
+                    WORK_DIR == "/tmp"
+                    and object_sizeMB + f_size / 1024 / 1024 > 10240 * 0.99
                 ):  # if zip file + one file size > 0.99G, skip extract and upload
                     LOGGER.error(
-                        "{} size is too large; skip extract and upload".format(f)
+                        "{} size is too large; skip extract and upload. Please use NAS and set the WORK_DIR environment variable to specify the NAS mount directory. For reference, see: https://help.aliyun.com/zh/functioncompute/fc-3-0/user-guide/configure-a-nas-file-system-1".format(f)
                     )
                     continue
                 zip_file.extract(file_info.filename, tmpWorkDir)
@@ -152,3 +156,4 @@ def handler(event, context):
         LOGGER.error(e)
     finally:
         os.remove(tmpZipfile)
+        shutil.rmtree(tmpWorkDir)
