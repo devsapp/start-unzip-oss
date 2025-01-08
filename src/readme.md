@@ -10,7 +10,7 @@
 </description>
 
 
-## 前期准备
+## 资源准备
 
 使用该项目，您需要有开通以下服务并拥有对应权限：
 
@@ -42,7 +42,7 @@
 
 <appcenter>
    
-- :fire: 通过 [云原生应用开发平台 CAP](https://devs.console.aliyun.com/applications/create?template=start-unzip-oss-cap) ，[![Deploy with Severless Devs](https://img.alicdn.com/imgextra/i1/O1CN01w5RFbX1v45s8TIXPz_!!6000000006118-55-tps-95-28.svg)](https://devs.console.aliyun.com/applications/create?template=start-unzip-oss-cap) 该应用。
+- :fire: 通过 [云原生应用开发平台 CAP](https://cap.console.aliyun.com/template-detail?template=start-unzip-oss-cap) ，[![Deploy with Severless Devs](https://img.alicdn.com/imgextra/i1/O1CN01w5RFbX1v45s8TIXPz_!!6000000006118-55-tps-95-28.svg)](https://cap.console.aliyun.com/template-detail?template=start-unzip-oss-cap) 该应用。
    
 </appcenter>
 <deploy>
@@ -70,7 +70,10 @@
 
 </appdetail>
 
-## 使用流程
+
+
+
+## 部署流程
 
 <usedetail id="flushContent">
 
@@ -89,7 +92,13 @@
 ![](https://img.alicdn.com/imgextra/i4/O1CN01WYPc2X1wcjhUAXa65_!!6000000006329-0-tps-1596-876.jpg)
 
 
-### 二次开发
+
+</usedetail>
+
+## 二次开发指南
+
+<development id="flushContent">
+
 您可以通过云端控制台的开发功能进行二次开发, 上面的示例, 解压保存回去的都还是本身触发函数的 OSS， 如果是保存到其他 OSS， 直接将 `bucket.put_object(newKey + name, file_obj)` 这样上传回 oss 的代码修改下即可， 比如：
 
 ```python
@@ -100,12 +109,10 @@ dst_bucket.put_object(newKey +  name, file_obj)
 
 ```
 
-</usedetail>
+</development>
 
-## 注意事项
 
-<matters id="flushContent">
 
-    
 
-</matters>
+
+
