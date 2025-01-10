@@ -23,7 +23,6 @@ import json
 import os
 import logging
 import zipfile
-import chardet
 import shutil
 
 # Close the info log printed by the oss SDK
@@ -36,29 +35,29 @@ LOGGER = logging.getLogger()
 def get_zipfile_name(origin_name):  # 解决中文乱码问题
     name = origin_name
     try:
-        name_bytes = origin_name.encode(encoding="cp437")
+        # 尝试常见编码
+        name_bytes = origin_name.encode("cp437")
+        # macOS 系统可能使用 utf-8-mac 编码
+        try:
+            name = name_bytes.decode("utf-8-mac")
+        except:
+            # 尝试其他常见编码
+            for encoding in ["utf-8", "gb18030", "cp437"]:
+                try:
+                    name = name_bytes.decode(encoding)
+                    break
+                except:
+                    continue
     except:
-        name_bytes = origin_name.encode(encoding="utf-8")
+        # 如果无法编码为 cp437，直接尝试 utf-8 和 gb18030
+        for encoding in ["utf-8", "gb18030"]:
+            try:
+                name = origin_name.encode(encoding).decode(encoding)
+                break
+            except:
+                continue
 
-    # the string to be detect is long enough, the detection result accuracy is higher
-    detect = chardet.detect(name_bytes)
-    confidence = detect["confidence"]
-    detect_encoding = detect["encoding"]
-    if confidence > 0.75 and (
-        detect_encoding.lower() in ["gb2312", "gbk", "gb18030", "ascii", "utf-8"]
-    ):
-        try:
-            if detect_encoding.lower() in ["gb2312", "gbk", "gb18030"]:
-                detect_encoding = "gb18030"
-            name = name_bytes.decode(detect_encoding)
-        except:
-            name = name_bytes.decode(encoding="gb18030")
-    else:
-        try:
-            name = name_bytes.decode(encoding="gb18030")
-        except:
-            name = name_bytes.decode(encoding="utf-8")
-    # fix windows \\ as dir segment
+    # 替换路径分隔符
     name = name.replace("\\", "/")
     return name
 
@@ -133,25 +132,39 @@ def handler(event, context):
     try:
         with zipfile.ZipFile(tmpZipfile) as zip_file:
             for file_info in zip_file.infolist():
+                # 跳过 macOS 系统生成的文件
+                if "__MACOSX" in file_info.filename or file_info.filename.endswith(".DS_Store"):
+                    continue
+
+                # 跳过文件夹
                 if file_info.is_dir():
                     continue
+
+                # 处理文件
                 f_size = file_info.file_size
                 if (
                     WORK_DIR == "/tmp"
                     and object_sizeMB + f_size / 1024 / 1024 > 10240 * 0.99
-                ):  # if zip file + one file size > 0.99G, skip extract and upload
+                ):
                     LOGGER.error(
                         "{} size is too large; skip extract and upload. Please use NAS and set the WORK_DIR environment variable to specify the NAS mount directory. For reference, see: https://help.aliyun.com/zh/functioncompute/fc-3-0/user-guide/configure-a-nas-file-system-1".format(
                             file_info.filename
                         )
                     )
                     continue
+
+                # 解压文件
                 zip_file.extract(file_info.filename, tmpWorkDir)
                 pathname = os.path.join(tmpWorkDir, file_info.filename)
-                newkey = os.path.join(
-                    newKeyPrefix, get_zipfile_name(file_info.filename)
-                )
+
+                # 获取处理后的文件名
+                cleaned_filename = get_zipfile_name(file_info.filename)
+
+                # 构建新的 OSS 路径
+                newkey = os.path.join(newKeyPrefix, cleaned_filename)
                 LOGGER.info("upload to {}".format(newkey))
+
+                # 上传文件
                 bucket.put_object_from_file(newkey, pathname)
                 os.remove(pathname)
     except Exception as e:
